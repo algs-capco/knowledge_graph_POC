@@ -1,0 +1,758 @@
+@prefix capco:   <https://data.capco.com/kg/ontology/> .
+@prefix asset:   <https://data.capco.com/kg/asset/> .
+@prefix vocab:   <https://data.capco.com/kg/vocab/> .
+@prefix dcat:    <http://www.w3.org/ns/dcat#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix prov:    <http://www.w3.org/ns/prov#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema:  <https://schema.org/> .
+@prefix sh:      <http://www.w3.org/ns/shacl#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Ontology header
+#################################################################
+
+capco: a owl:Ontology ;
+    dcterms:title "Capco Enterprise Knowledge Graph Ontology" ;
+    dcterms:description "Ontology for cataloguing unstructured enterprise knowledge assets and routing LLM queries to relevant source documents, evidence snippets, and provenance." ;
+    dcterms:created "2026-06-29"^^xsd:date ;
+    owl:versionInfo "0.2" .
+
+#################################################################
+# Core asset classes
+#################################################################
+
+capco:KnowledgeAsset a owl:Class ;
+    rdfs:subClassOf dcat:Resource ;
+    rdfs:label "Knowledge Asset" ;
+    rdfs:comment "Any reusable business knowledge item discovered from source repositories or curated manually." .
+
+capco:Document a owl:Class ;
+    rdfs:subClassOf capco:KnowledgeAsset, foaf:Document ;
+    rdfs:label "Document" .
+
+capco:Presentation a owl:Class ;
+    rdfs:subClassOf capco:Document ;
+    rdfs:label "Presentation" .
+
+capco:Proposition a owl:Class ;
+    rdfs:subClassOf capco:KnowledgeAsset ;
+    rdfs:label "Proposition" .
+
+capco:Credential a owl:Class ;
+    rdfs:subClassOf capco:KnowledgeAsset ;
+    rdfs:label "Credential" .
+
+capco:CaseStudy a owl:Class ;
+    rdfs:subClassOf capco:Credential ;
+    rdfs:label "Case Study" .
+
+capco:RFPResponse a owl:Class ;
+    rdfs:subClassOf capco:Document ;
+    rdfs:label "RFP Response" .
+
+capco:RFIResponse a owl:Class ;
+    rdfs:subClassOf capco:Document ;
+    rdfs:label "RFI Response" .
+
+capco:Proposal a owl:Class ;
+    rdfs:subClassOf capco:Document ;
+    rdfs:label "Proposal" .
+
+capco:AssetChunk a owl:Class ;
+    rdfs:subClassOf dcat:Resource ;
+    rdfs:label "Asset Chunk" ;
+    rdfs:comment "A bounded text, slide, page, or section fragment used for LLM grounding." .
+
+capco:EvidenceSnippet a owl:Class ;
+    rdfs:subClassOf capco:AssetChunk ;
+    rdfs:label "Evidence Snippet" .
+
+capco:TemplateSection a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Template Section" .
+
+#################################################################
+# Business entity classes
+#################################################################
+
+capco:Person a owl:Class ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:label "Person" .
+
+capco:Organisation a owl:Class ;
+    rdfs:subClassOf foaf:Organization ;
+    rdfs:label "Organisation" .
+
+capco:Client a owl:Class ;
+    rdfs:subClassOf capco:Organisation ;
+    rdfs:label "Client" .
+
+capco:Project a owl:Class ;
+    rdfs:label "Project" .
+
+capco:Capability a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Capability" .
+
+capco:Domain a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Domain" .
+
+#################################################################
+# Source, governance, and retrieval classes
+#################################################################
+
+capco:SourceSystem a owl:Class ;
+    rdfs:subClassOf prov:Agent ;
+    rdfs:label "Source System" .
+
+capco:SourceLocation a owl:Class ;
+    rdfs:subClassOf dcat:Dataset ;
+    rdfs:label "Source Location" ;
+    rdfs:comment "A configured source such as a OneDrive folder, SharePoint site, SharePoint library, or future Microsoft Graph drive scope." .
+
+capco:FileObject a owl:Class ;
+    rdfs:subClassOf dcat:Distribution ;
+    rdfs:label "File Object" ;
+    rdfs:comment "The physical source file or repository item from which knowledge assets are derived." .
+
+capco:PermissionProfile a owl:Class ;
+    rdfs:label "Permission Profile" ;
+    rdfs:comment "Captured security metadata used to prevent retrieval of content the requesting user should not see." .
+
+capco:IngestionRun a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Ingestion Run" .
+
+capco:ExtractionActivity a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Extraction Activity" .
+
+capco:ValidationEvent a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Validation Event" .
+
+capco:SearchRequest a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Search Request" .
+
+capco:RetrievalResult a owl:Class ;
+    rdfs:label "Retrieval Result" ;
+    rdfs:comment "A ranked asset or chunk returned to the LLM orchestration layer." .
+
+capco:VectorEmbedding a owl:Class ;
+    rdfs:label "Vector Embedding" ;
+    rdfs:comment "Optional future pointer to an embedding record in a vector store." .
+
+capco:SeedItem a owl:Class ;
+    rdfs:label "Seed Item" ;
+    rdfs:comment "Curated baseline vocabulary entry maintained through the UI." .
+
+capco:ClientAlias a owl:Class ;
+    rdfs:subClassOf capco:SeedItem ;
+    rdfs:label "Client Alias" .
+
+capco:DocumentFamily a owl:Class ;
+    rdfs:subClassOf capco:SeedItem ;
+    rdfs:label "Document Family" .
+
+capco:SourceDictionaryEntry a owl:Class ;
+    rdfs:subClassOf capco:SeedItem ;
+    rdfs:label "Source Dictionary Entry" .
+
+capco:SeedCollection a owl:Class ;
+    rdfs:label "Seed Collection" ;
+    rdfs:comment "A grouping for curated baseline vocabulary such as clients, aliases, domains, or capabilities." .
+
+capco:InferenceEvent a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Inference Event" ;
+    rdfs:comment "A machine-generated reasoning event that produced or suggested a triple." .
+
+capco:ReasoningActivity a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Reasoning Activity" ;
+    rdfs:comment "An activity that applies rules or a reasoner to derive graph assertions." .
+
+capco:VerificationEvent a owl:Class ;
+    rdfs:subClassOf prov:Activity ;
+    rdfs:label "Verification Event" ;
+    rdfs:comment "Human review of a seed item or inference." .
+
+capco:AssertionState a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Assertion State" .
+
+#################################################################
+# Controlled vocabularies
+#################################################################
+
+vocab:DomainScheme a skos:ConceptScheme ;
+    skos:prefLabel "Capco Domain Scheme" .
+
+vocab:CapabilityScheme a skos:ConceptScheme ;
+    skos:prefLabel "Capco Capability Scheme" .
+
+vocab:TemplateSectionScheme a skos:ConceptScheme ;
+    skos:prefLabel "Proposal and Presentation Template Sections" .
+
+vocab:AssertionStateScheme a skos:ConceptScheme ;
+    skos:prefLabel "Assertion State Scheme" .
+
+vocab:WealthAssetManagement a capco:Domain ;
+    skos:inScheme vocab:DomainScheme ;
+    skos:prefLabel "Wealth & Asset Management" ;
+    skos:altLabel "WAM" .
+
+vocab:BankingPayments a capco:Domain ;
+    skos:inScheme vocab:DomainScheme ;
+    skos:prefLabel "Banking and Payments" ;
+    skos:altLabel "B&P" .
+
+vocab:CapitalMarkets a capco:Domain ;
+    skos:inScheme vocab:DomainScheme ;
+    skos:prefLabel "Capital Markets" .
+
+vocab:Insurance a capco:Domain ;
+    skos:inScheme vocab:DomainScheme ;
+    skos:prefLabel "Insurance" .
+
+vocab:Energy a capco:Domain ;
+    skos:inScheme vocab:DomainScheme ;
+    skos:prefLabel "Energy" .
+
+vocab:Data a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Data" .
+
+vocab:DataArchitectureEngineering a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Data Architecture & Engineering" ;
+    skos:broader vocab:Data .
+
+vocab:DataStrategyAdvisory a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Data Strategy & Advisory" ;
+    skos:broader vocab:Data .
+
+vocab:DataAnalytics a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Data Analytics" ;
+    skos:broader vocab:Data .
+
+vocab:AI a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "AI" ;
+    skos:broader vocab:DataAnalytics .
+
+vocab:DataScience a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Data Science" ;
+    skos:broader vocab:DataAnalytics .
+
+vocab:DataPrivacyProtection a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Data Privacy and Protection" ;
+    skos:broader vocab:Data .
+
+vocab:FFRF a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "FFRF" .
+
+vocab:BusinessConsulting a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Business Consulting" .
+
+vocab:Technology a capco:Capability ;
+    skos:inScheme vocab:CapabilityScheme ;
+    skos:prefLabel "Technology" .
+
+vocab:ProblemStatement a capco:TemplateSection ;
+    skos:inScheme vocab:TemplateSectionScheme ;
+    skos:prefLabel "Problem Statement" .
+
+vocab:SolutionApproach a capco:TemplateSection ;
+    skos:inScheme vocab:TemplateSectionScheme ;
+    skos:prefLabel "Solution Approach" .
+
+vocab:BusinessBenefitsImpact a capco:TemplateSection ;
+    skos:inScheme vocab:TemplateSectionScheme ;
+    skos:prefLabel "Business Benefits / Impact" .
+
+vocab:Active a capco:AssertionState ;
+    skos:inScheme vocab:AssertionStateScheme ;
+    skos:prefLabel "Active" .
+
+vocab:Archived a capco:AssertionState ;
+    skos:inScheme vocab:AssertionStateScheme ;
+    skos:prefLabel "Archived" .
+
+vocab:PendingReview a capco:AssertionState ;
+    skos:inScheme vocab:AssertionStateScheme ;
+    skos:prefLabel "Pending Review" .
+
+#################################################################
+# Object properties
+#################################################################
+
+capco:aboutCapability a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:Capability ;
+    rdfs:label "about capability" .
+
+capco:aboutDomain a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:Domain ;
+    rdfs:label "about domain" .
+
+capco:aboutClient a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:Client ;
+    rdfs:label "about client" .
+
+capco:aboutProject a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:Project ;
+    rdfs:label "about project" .
+
+capco:authoredBy a owl:ObjectProperty ;
+    rdfs:subPropertyOf dcterms:creator ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:Person ;
+    rdfs:label "authored by" .
+
+capco:ownedBy a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:Person ;
+    rdfs:label "owned by" .
+
+capco:contributedTo a owl:ObjectProperty ;
+    rdfs:domain capco:Person ;
+    rdfs:range capco:KnowledgeAsset ;
+    rdfs:label "contributed to" .
+
+capco:hasPrimaryCapability a owl:ObjectProperty ;
+    rdfs:domain capco:Person ;
+    rdfs:range capco:Capability ;
+    rdfs:label "has primary capability" .
+
+capco:alignedToDomain a owl:ObjectProperty ;
+    rdfs:domain capco:Person ;
+    rdfs:range capco:Domain ;
+    rdfs:label "aligned to domain" .
+
+capco:clientDomain a owl:ObjectProperty ;
+    rdfs:domain capco:Client ;
+    rdfs:range capco:Domain ;
+    rdfs:label "client domain" .
+
+capco:supportedBy a owl:ObjectProperty ;
+    rdfs:domain capco:Proposition ;
+    rdfs:range capco:Credential ;
+    rdfs:label "supported by" .
+
+capco:supports a owl:ObjectProperty ;
+    owl:inverseOf capco:supportedBy ;
+    rdfs:domain capco:Credential ;
+    rdfs:range capco:Proposition ;
+    rdfs:label "supports" .
+
+capco:usedIn a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:KnowledgeAsset ;
+    rdfs:label "used in" .
+
+capco:reusedIn a owl:ObjectProperty ;
+    rdfs:subPropertyOf capco:usedIn ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:KnowledgeAsset ;
+    rdfs:label "reused in" .
+
+capco:containsChunk a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:AssetChunk ;
+    rdfs:label "contains chunk" .
+
+capco:chunkOf a owl:ObjectProperty ;
+    owl:inverseOf capco:containsChunk ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range capco:KnowledgeAsset ;
+    rdfs:label "chunk of" .
+
+capco:hasTemplateSection a owl:ObjectProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range capco:TemplateSection ;
+    rdfs:label "has template section" .
+
+capco:mentions a owl:ObjectProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range owl:Thing ;
+    rdfs:label "mentions" .
+
+capco:hasEvidence a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:EvidenceSnippet ;
+    rdfs:label "has evidence" .
+
+capco:storedIn a owl:ObjectProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range capco:SourceLocation ;
+    rdfs:label "stored in" .
+
+capco:physicalFile a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:FileObject ;
+    rdfs:label "physical file" .
+
+capco:permissionProfile a owl:ObjectProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range capco:PermissionProfile ;
+    rdfs:label "permission profile" .
+
+capco:ingestedFrom a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:FileObject ;
+    rdfs:label "ingested from" .
+
+capco:generatedByRun a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasGeneratedBy ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:IngestionRun ;
+    rdfs:label "generated by run" .
+
+capco:validatedBy a owl:ObjectProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range capco:ValidationEvent ;
+    rdfs:label "validated by" .
+
+capco:hasEmbedding a owl:ObjectProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range capco:VectorEmbedding ;
+    rdfs:label "has embedding" .
+
+capco:returnedAsset a owl:ObjectProperty ;
+    rdfs:domain capco:RetrievalResult ;
+    rdfs:range capco:KnowledgeAsset ;
+    rdfs:label "returned asset" .
+
+capco:returnedChunk a owl:ObjectProperty ;
+    rdfs:domain capco:RetrievalResult ;
+    rdfs:range capco:AssetChunk ;
+    rdfs:label "returned chunk" .
+
+capco:hasState a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range capco:AssertionState ;
+    rdfs:label "has state" .
+
+capco:belongsToCollection a owl:ObjectProperty ;
+    rdfs:domain capco:SeedItem ;
+    rdfs:range capco:SeedCollection ;
+    rdfs:label "belongs to collection" .
+
+capco:verifiedBy a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range foaf:Agent ;
+    rdfs:label "verified by" .
+
+capco:verifiedAt a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "verified at" .
+
+capco:verificationStatus a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string ;
+    rdfs:label "verification status" .
+
+capco:createdAt a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "created at" .
+
+capco:updatedAt a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "updated at" .
+
+capco:archivedAt a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "archived at" .
+
+capco:createdBy a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range foaf:Agent ;
+    rdfs:label "created by" .
+
+capco:updatedBy a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range foaf:Agent ;
+    rdfs:label "updated by" .
+
+capco:archivedBy a owl:ObjectProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range foaf:Agent ;
+    rdfs:label "archived by" .
+
+capco:inferenceConfidence a owl:DatatypeProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "inference confidence" .
+
+capco:inferenceRuleId a owl:DatatypeProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "inference rule id" .
+
+capco:reasonerComponent a owl:ObjectProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range prov:Agent ;
+    rdfs:label "reasoner component" .
+
+capco:reasonerRuleSet a owl:DatatypeProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "reasoner rule set" .
+
+capco:derivationNote a owl:DatatypeProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range xsd:string ;
+    rdfs:label "derivation note" .
+
+capco:sourceEvidence a owl:ObjectProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range owl:Thing ;
+    rdfs:label "source evidence" .
+
+capco:inferredSubject a owl:ObjectProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range owl:Thing ;
+    rdfs:label "inferred subject" .
+
+capco:inferredPredicate a owl:ObjectProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range rdf:Property ;
+    rdfs:label "inferred predicate" .
+
+capco:inferredObject a owl:ObjectProperty ;
+    rdfs:domain capco:InferenceEvent ;
+    rdfs:range owl:Thing ;
+    rdfs:label "inferred object" .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+capco:title a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dcterms:title ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string .
+
+capco:description a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dcterms:description ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:string .
+
+capco:sourceUri a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "source URI" .
+
+capco:webUrl a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:anyURI ;
+    rdfs:label "web URL" .
+
+capco:driveItemId a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:string ;
+    rdfs:label "Microsoft Graph drive item id" .
+
+capco:siteId a owl:DatatypeProperty ;
+    rdfs:domain capco:SourceLocation ;
+    rdfs:range xsd:string ;
+    rdfs:label "Microsoft Graph site id" .
+
+capco:driveId a owl:DatatypeProperty ;
+    rdfs:domain capco:SourceLocation ;
+    rdfs:range xsd:string ;
+    rdfs:label "Microsoft Graph drive id" .
+
+capco:fileName a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:string .
+
+capco:fileExtension a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:string .
+
+capco:mimeType a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:string .
+
+capco:contentHash a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:string .
+
+capco:versionLabel a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:string .
+
+capco:lastModifiedAt a owl:DatatypeProperty ;
+    rdfs:domain capco:FileObject ;
+    rdfs:range xsd:dateTime .
+
+capco:lastIndexedAt a owl:DatatypeProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range xsd:dateTime .
+
+capco:chunkIndex a owl:DatatypeProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range xsd:integer .
+
+capco:pageNumber a owl:DatatypeProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range xsd:integer .
+
+capco:slideNumber a owl:DatatypeProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range xsd:integer .
+
+capco:text a owl:DatatypeProperty ;
+    rdfs:domain capco:AssetChunk ;
+    rdfs:range xsd:string .
+
+capco:summary a owl:DatatypeProperty ;
+    rdfs:domain capco:KnowledgeAsset ;
+    rdfs:range xsd:string .
+
+capco:confidenceScore a owl:DatatypeProperty ;
+    rdfs:domain owl:Thing ;
+    rdfs:range xsd:decimal .
+
+capco:rankingScore a owl:DatatypeProperty ;
+    rdfs:domain capco:RetrievalResult ;
+    rdfs:range xsd:decimal .
+
+capco:embeddingModel a owl:DatatypeProperty ;
+    rdfs:domain capco:VectorEmbedding ;
+    rdfs:range xsd:string .
+
+capco:embeddingId a owl:DatatypeProperty ;
+    rdfs:domain capco:VectorEmbedding ;
+    rdfs:range xsd:string .
+
+capco:aclHash a owl:DatatypeProperty ;
+    rdfs:domain capco:PermissionProfile ;
+    rdfs:range xsd:string .
+
+capco:isSecurityTrimmed a owl:DatatypeProperty ;
+    rdfs:domain capco:RetrievalResult ;
+    rdfs:range xsd:boolean .
+
+#################################################################
+# SHACL quality gates for PoC ingestion
+#################################################################
+
+capco:KnowledgeAssetShape a sh:NodeShape ;
+    sh:targetClass capco:KnowledgeAsset ;
+    sh:property [
+        sh:path capco:title ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path capco:physicalFile ;
+        sh:minCount 0 ;
+        sh:class capco:FileObject ;
+    ] ;
+    sh:property [
+        sh:path capco:aboutCapability ;
+        sh:minCount 0 ;
+        sh:class capco:Capability ;
+    ] ;
+    sh:property [
+        sh:path capco:confidenceScore ;
+        sh:minInclusive 0 ;
+        sh:maxInclusive 1 ;
+        sh:datatype xsd:decimal ;
+    ] .
+
+capco:FileObjectShape a sh:NodeShape ;
+    sh:targetClass capco:FileObject ;
+    sh:property [
+        sh:path capco:fileName ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path capco:sourceUri ;
+        sh:minCount 1 ;
+        sh:datatype xsd:anyURI ;
+    ] ;
+    sh:property [
+        sh:path capco:storedIn ;
+        sh:minCount 1 ;
+        sh:class capco:SourceLocation ;
+    ] .
+
+capco:AssetChunkShape a sh:NodeShape ;
+    sh:targetClass capco:AssetChunk ;
+    sh:property [
+        sh:path capco:chunkIndex ;
+        sh:minCount 1 ;
+        sh:datatype xsd:integer ;
+    ] ;
+    sh:property [
+        sh:path capco:text ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+    ] .
+
+capco:PersonShape a sh:NodeShape ;
+    sh:targetClass capco:Person ;
+    sh:property [
+        sh:path capco:hasPrimaryCapability ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:class capco:Capability ;
+    ] .
+
+capco:ClientShape a sh:NodeShape ;
+    sh:targetClass capco:Client ;
+    sh:property [
+        sh:path capco:clientDomain ;
+        sh:minCount 0 ;
+        sh:maxCount 1 ;
+        sh:class capco:Domain ;
+    ] .
+
+#################################################################
+# Example source configuration instances
+#################################################################
+
+asset:OneDriveDemoSource a capco:SourceLocation ;
+    capco:title "Local OneDrive demo folder" ;
+    capco:description "Local folder configured for the proof of concept crawler." .
+
+asset:SharePointDemoSource a capco:SourceLocation ;
+    capco:title "SharePoint propositions, RFP responses, and credentials library" ;
+    capco:description "SharePoint source configured for the proof of concept crawler." .
+
+asset:MicrosoftGraphSource a capco:SourceSystem ;
+    capco:title "Microsoft Graph" .
+
+asset:UIAgent a foaf:Agent ;
+    foaf:name "Capco KG UI" .
+
+capco:JenaRuleReasoner a prov:SoftwareAgent , foaf:Agent ;
+    foaf:name "Apache Jena rule reasoner" ;
+    dcterms:description "Native Fuseki/Jena rule engine used to derive file classifications and seed matches." .

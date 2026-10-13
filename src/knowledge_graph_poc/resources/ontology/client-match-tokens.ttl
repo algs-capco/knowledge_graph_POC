@@ -1,0 +1,8 @@
+@prefix capco: <https://data.capco.com/kg/ontology/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://data.capco.com/kg/asset/seed-axa>    capco:matchToken "Axa", "axa" .
+<https://data.capco.com/kg/asset/seed-aviva>  capco:matchToken "Aviva", "aviva" .
+<https://data.capco.com/kg/asset/seed-hsbc>   capco:matchToken "HSBC", "hsbc" .
+<https://data.capco.com/kg/asset/seed-lciv>   capco:matchToken "LCIV", "lciv" .
+<https://data.capco.com/kg/asset/seed-zurich> capco:matchToken "Zurich", "zurich" .

@@ -1,0 +1,3 @@
+seed_uri,type_uri,canonical_label,alias_regex,state,confidence,description,notes
+https://data.capco.com/kg/asset/seed-contract-engagement-letter-regex,https://data.capco.com/kg/ontology/Contract,Contract,"(?i).*engagement letter.*",Active,1.0,Matches engagement letter documents,Temporary regex seed until MS Graph metadata is available
+https://data.capco.com/kg/asset/seed-proposition-proposal-regex,https://data.capco.com/kg/ontology/Proposition,Proposition,"(?i).*proposal.*",Active,1.0,Maps proposal wording to Proposition,Use when filenames contain Proposal but canonical class is Proposition

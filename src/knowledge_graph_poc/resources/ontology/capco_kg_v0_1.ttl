@@ -1,0 +1,372 @@
+@prefix ex:      <http://capco.example/kg/> .
+@prefix dcterms:  <http://purl.org/dc/terms/> .
+@prefix prov:     <http://www.w3.org/ns/prov#> .
+@prefix skos:     <http://www.w3.org/2004/02/skos/core#> .
+@prefix sh:       <http://www.w3.org/ns/shacl#> .
+@prefix foaf:     <http://xmlns.com/foaf/0.1/> .
+@prefix owl:      <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# Ontology
+#################################################################
+
+ex:KnowledgeAsset a owl:Class ;
+    rdfs:label "Knowledge Asset" .
+
+ex:Document a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "Document" .
+
+ex:Proposition a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "Proposition" .
+
+ex:Credential a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "Credential" .
+
+ex:CaseStudy a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "Case Study" .
+
+ex:RFPResponse a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "RFP Response" .
+
+ex:RFIResponse a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "RFI Response" .
+
+ex:Presentation a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "Presentation" .
+
+ex:Proposal a owl:Class ;
+    rdfs:subClassOf ex:KnowledgeAsset ;
+    rdfs:label "Proposal" .
+
+ex:Person a owl:Class ;
+    rdfs:subClassOf foaf:Person ;
+    rdfs:label "Person" .
+
+ex:Client a owl:Class ;
+    rdfs:label "Client" .
+
+ex:Project a owl:Class ;
+    rdfs:label "Project" .
+
+ex:Capability a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Capability" .
+
+ex:Domain a owl:Class ;
+    rdfs:subClassOf skos:Concept ;
+    rdfs:label "Domain" .
+
+ex:AssetChunk a owl:Class ;
+    rdfs:label "Asset Chunk" .
+
+ex:EvidenceSnippet a owl:Class ;
+    rdfs:label "Evidence Snippet" .
+
+ex:SourceSystem a owl:Class ;
+    rdfs:label "Source System" .
+
+ex:SourceLocation a owl:Class ;
+    rdfs:label "Source Location" .
+
+ex:IngestionRun a owl:Class ;
+    rdfs:label "Ingestion Run" .
+
+ex:ValidationEvent a owl:Class ;
+    rdfs:label "Validation Event" .
+
+ex:TemplateSection a owl:Class ;
+    rdfs:label "Template Section" .
+
+#################################################################
+# Controlled vocabularies
+#################################################################
+
+ex:DomainScheme a skos:ConceptScheme ;
+    rdfs:label "Capco Domain Scheme" .
+
+ex:CapabilityScheme a skos:ConceptScheme ;
+    rdfs:label "Capco Capability Scheme" .
+
+ex:WealthAssetManagement a skos:Concept ;
+    skos:inScheme ex:DomainScheme ;
+    skos:prefLabel "Wealth & Asset Management" ;
+    skos:notation "WAM" .
+
+ex:BankingPayments a skos:Concept ;
+    skos:inScheme ex:DomainScheme ;
+    skos:prefLabel "Banking and Payments" ;
+    skos:notation "B&P" .
+
+ex:CapitalMarkets a skos:Concept ;
+    skos:inScheme ex:DomainScheme ;
+    skos:prefLabel "Capital Markets" .
+
+ex:Insurance a skos:Concept ;
+    skos:inScheme ex:DomainScheme ;
+    skos:prefLabel "Insurance" .
+
+ex:Energy a skos:Concept ;
+    skos:inScheme ex:DomainScheme ;
+    skos:prefLabel "Energy" .
+
+ex:Data a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Data" .
+
+ex:FFRF a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "FFRF" .
+
+ex:BusinessConsulting a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Business Consulting" .
+
+ex:Technology a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Technology" .
+
+ex:DataArchitectureEngineering a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Data Architecture & Engineering" ;
+    skos:broader ex:Data .
+
+ex:DataStrategyAdvisory a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Data Strategy & Advisory" ;
+    skos:broader ex:Data .
+
+ex:DataAnalytics a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Data Analytics" ;
+    skos:broader ex:Data .
+
+ex:DataScience a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Data Science" ;
+    skos:broader ex:DataAnalytics .
+
+ex:AI a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "AI" ;
+    skos:broader ex:DataAnalytics .
+
+ex:DataPrivacyProtection a skos:Concept ;
+    skos:inScheme ex:CapabilityScheme ;
+    skos:prefLabel "Data Privacy and Protection" ;
+    skos:broader ex:Data .
+
+#################################################################
+# Object properties
+#################################################################
+
+ex:hasPrimaryCapability a owl:ObjectProperty ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:Capability ;
+    rdfs:label "has primary capability" .
+
+ex:alignedToDomain a owl:ObjectProperty ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:Domain ;
+    rdfs:label "aligned to domain" .
+
+ex:clientDomain a owl:ObjectProperty ;
+    rdfs:domain ex:Client ;
+    rdfs:range ex:Domain ;
+    rdfs:label "client domain" .
+
+ex:aboutCapability a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:Capability ;
+    rdfs:label "about capability" .
+
+ex:aboutDomain a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:Domain ;
+    rdfs:label "about domain" .
+
+ex:aboutClient a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:Client ;
+    rdfs:label "about client" .
+
+ex:aboutProject a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:Project ;
+    rdfs:label "about project" .
+
+ex:authoredBy a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:Person ;
+    rdfs:label "authored by" .
+
+ex:contributedTo a owl:ObjectProperty ;
+    rdfs:domain ex:Person ;
+    rdfs:range ex:KnowledgeAsset ;
+    rdfs:label "contributed to" .
+
+ex:supportedBy a owl:ObjectProperty ;
+    rdfs:domain ex:Proposition ;
+    rdfs:range ex:Credential ;
+    rdfs:label "supported by" .
+
+ex:supports a owl:ObjectProperty ;
+    owl:inverseOf ex:supportedBy ;
+    rdfs:domain ex:Credential ;
+    rdfs:range ex:Proposition ;
+    rdfs:label "supports" .
+
+ex:usedIn a owl:ObjectProperty ;
+    rdfs:domain ex:Credential ;
+    rdfs:range ex:RFPResponse ;
+    rdfs:label "used in" .
+
+ex:containsChunk a owl:ObjectProperty ;
+    rdfs:domain ex:Document ;
+    rdfs:range ex:AssetChunk ;
+    rdfs:label "contains chunk" .
+
+ex:hasSection a owl:ObjectProperty ;
+    rdfs:domain ex:AssetChunk ;
+    rdfs:range ex:TemplateSection ;
+    rdfs:label "has section" .
+
+ex:mentions a owl:ObjectProperty ;
+    rdfs:domain ex:AssetChunk ;
+    rdfs:range owl:Thing ;
+    rdfs:label "mentions" .
+
+ex:derivedFrom a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasDerivedFrom ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range owl:Thing ;
+    rdfs:label "derived from" .
+
+ex:generatedByRun a owl:ObjectProperty ;
+    rdfs:subPropertyOf prov:wasGeneratedBy ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:IngestionRun ;
+    rdfs:label "generated by run" .
+
+ex:validatedBy a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:ValidationEvent ;
+    rdfs:label "validated by" .
+
+ex:storedIn a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:SourceLocation ;
+    rdfs:label "stored in" .
+
+ex:ingestedFrom a owl:ObjectProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range ex:SourceSystem ;
+    rdfs:label "ingested from" .
+
+#################################################################
+# Datatype properties
+#################################################################
+
+ex:title a owl:DatatypeProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range xsd:string .
+
+ex:description a owl:DatatypeProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range xsd:string .
+
+ex:confidenceScore a owl:DatatypeProperty ;
+    rdfs:domain ex:KnowledgeAsset ;
+    rdfs:range xsd:decimal .
+
+ex:chunkIndex a owl:DatatypeProperty ;
+    rdfs:domain ex:AssetChunk ;
+    rdfs:range xsd:integer .
+
+ex:sectionType a owl:DatatypeProperty ;
+    rdfs:domain ex:AssetChunk ;
+    rdfs:range xsd:string .
+
+ex:lastValidatedAt a owl:DatatypeProperty ;
+    rdfs:domain ex:ValidationEvent ;
+    rdfs:range xsd:dateTime .
+
+ex:versionLabel a owl:DatatypeProperty ;
+    rdfs:domain ex:Document ;
+    rdfs:range xsd:string .
+
+#################################################################
+# SHACL constraints
+#################################################################
+
+ex:PersonShape a sh:NodeShape ;
+    sh:targetClass ex:Person ;
+    sh:property [
+        sh:path ex:hasPrimaryCapability ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ex:alignedToDomain ;
+        sh:minCount 0 ;
+    ] .
+
+ex:ClientShape a sh:NodeShape ;
+    sh:targetClass ex:Client ;
+    sh:property [
+        sh:path ex:clientDomain ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+ex:PropositionShape a sh:NodeShape ;
+    sh:targetClass ex:Proposition ;
+    sh:property [
+        sh:path ex:supportedBy ;
+        sh:minCount 0 ;
+    ] .
+
+ex:CredentialShape a sh:NodeShape ;
+    sh:targetClass ex:Credential ;
+    sh:property [
+        sh:path ex:usedIn ;
+        sh:minCount 0 ;
+    ] .
+
+#################################################################
+# Example instance patterns
+#################################################################
+
+ex:ExampleClient a ex:Client ;
+    ex:title "Example Client" ;
+    ex:clientDomain ex:CapitalMarkets .
+
+ex:ExamplePerson a ex:Person ;
+    foaf:name "Example Person" ;
+    ex:hasPrimaryCapability ex:DataAnalytics ;
+    ex:alignedToDomain ex:CapitalMarkets ;
+    ex:alignedToDomain ex:BankingPayments .
+
+ex:ExampleCredential a ex:Credential ;
+    ex:title "Example Credential" ;
+    ex:aboutDomain ex:CapitalMarkets ;
+    ex:aboutCapability ex:DataAnalytics ;
+    ex:aboutClient ex:ExampleClient .
+
+ex:ExampleProposition a ex:Proposition ;
+    ex:title "Example Proposition" ;
+    ex:supportedBy ex:ExampleCredential .
+
+ex:ExampleRFP a ex:RFPResponse ;
+    ex:title "Example RFP Response" .
+
+ex:ExampleCredential ex:usedIn ex:ExampleRFP .
