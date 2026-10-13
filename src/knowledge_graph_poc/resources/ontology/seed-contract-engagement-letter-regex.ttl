@@ -1,0 +1,9 @@
+@prefix capco: <https://data.capco.com/kg/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<https://data.capco.com/kg/asset/seed-contract-engagement-letter-regex>
+    a capco:SeedItem, capco:Contract ;
+    rdfs:label "Contract" ;
+    capco:aliasToken "(?i).*engagement letter.*" ;
+    capco:canonicalLabel "Contract" ;
+    capco:state "Active" .

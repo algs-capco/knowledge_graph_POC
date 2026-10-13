@@ -1,0 +1,93 @@
+@prefix capco: <https://data.capco.com/kg/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://data.capco.com/kg/asset/seed-contract>
+    a capco:SeedItem, capco:Contract ;
+    rdfs:label "Contract" ;
+    capco:aliasToken "(?i).*engagement letter.*" ;
+    capco:canonicalLabel "Contract" ;
+    capco:state "Active" ;
+    capco:description "Matches engagement letter documents" ;
+    rdfs:comment "Confidence 1. Notes: Use regex form for partial filename matching" .
+
+<https://data.capco.com/kg/asset/seed-proposition>
+    a capco:SeedItem, capco:Proposition ;
+    rdfs:label "Proposition" ;
+    capco:aliasToken "(?i).*proposal.*" ;
+    capco:canonicalLabel "Proposition" ;
+    capco:state "Active" ;
+    capco:description "Maps proposal wording to Proposition" ;
+    rdfs:comment "Confidence 1. Notes: Use when filenames contain Proposal but canonical class is Proposition" .
+
+<https://data.capco.com/kg/asset/seed-credential>
+    a capco:SeedItem, capco:Credential ;
+    rdfs:label "Credential" ;
+    capco:aliasToken "(?i).*(credential|credentials|case study).*" ;
+    capco:canonicalLabel "Credential" ;
+    capco:state "Active" ;
+    capco:description "Matches credential and case study documents" ;
+    rdfs:comment "Confidence 1. Notes: Can be narrowed later if too broad" .
+
+<https://data.capco.com/kg/asset/seed-rfpresponse>
+    a capco:SeedItem, capco:RFPResponse ;
+    rdfs:label "RFPResponse" ;
+    capco:aliasToken "(?i).*rfp.*" ;
+    capco:canonicalLabel "RFPResponse" ;
+    capco:state "Active" ;
+    capco:description "Matches RFP response documents" ;
+    rdfs:comment "Confidence 1. Notes: May also catch folder names if stored in fileName" .
+
+<https://data.capco.com/kg/asset/seed-presentation>
+    a capco:SeedItem, capco:Presentation ;
+    rdfs:label "Presentation" ;
+    capco:aliasToken "(?i).*(ppt|pptx|deck|slide|slides|presentation).*" ;
+    capco:canonicalLabel "Presentation" ;
+    capco:state "Active" ;
+    capco:description "Matches presentation style documents" ;
+    rdfs:comment "Confidence 1. Notes: Good starter rule for Office files" .
+
+<https://data.capco.com/kg/asset/seed-lciv>
+    a capco:SeedItem, capco:Client ;
+    rdfs:label "LCIV" ;
+    capco:aliasToken "(?i).*London CIV*" ;
+    capco:canonicalLabel "LCIV" ;
+    capco:state "Active" ;
+    capco:description "Matches client Names" ;
+    rdfs:comment "Confidence 1. Notes: Use regex form for partial filename matching" .
+
+<https://data.capco.com/kg/asset/seed-hsbc>
+    a capco:SeedItem, capco:Client ;
+    rdfs:label "HSBC" ;
+    capco:aliasToken "(?i).*(?:HSBC|Hong\\s*Kong\\s*(?:and\\s*)?Shanghai\\s*(?:Bank|Banking\\s+Corporation)|Hong\\s+Kong\\s+Shanghai\\s+Bank).*" ;
+    capco:canonicalLabel "HSBC" ;
+    capco:state "Active" ;
+    capco:description "Matches client Names" ;
+    rdfs:comment "Confidence 2. Notes: Use regex form for partial filename matching" .
+
+<https://data.capco.com/kg/asset/seed-deutsche-bank>
+    a capco:SeedItem, capco:Client ;
+    rdfs:label "Deutsche Bank" ;
+    capco:aliasToken "(?i).*DB*" ;
+    capco:canonicalLabel "Deutsche Bank" ;
+    capco:state "Active" ;
+    capco:description "Matches client Names" ;
+    rdfs:comment "Confidence 3. Notes: Use regex form for partial filename matching" .
+
+<https://data.capco.com/kg/asset/seed-citigroup>
+    a capco:SeedItem, capco:Client ;
+    rdfs:label "Citigroup" ;
+    capco:aliasToken "(?i).*Citi*" ;
+    capco:canonicalLabel "Citigroup" ;
+    capco:state "Active" ;
+    capco:description "Matches client Names" ;
+    rdfs:comment "Confidence 4. Notes: Use regex form for partial filename matching" .
+
+<https://data.capco.com/kg/asset/seed-thought-leadership>
+    a capco:SeedItem, <https://data.capco.com/kg/ontology/ThoughtLeadership> ;
+    rdfs:label "Thought Leadership" ;
+    capco:aliasToken "(?i).*blog.*" ;
+    capco:canonicalLabel "Thought Leadership" ;
+    capco:state "Active" ;
+    capco:description "Matches Thought Leadership documents" ;
+    rdfs:comment "Confidence 1. Notes: Use regex form for partial filename matching" .

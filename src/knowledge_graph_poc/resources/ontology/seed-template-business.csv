@@ -1,0 +1,11 @@
+canonical_label,alias_text_or_regex,seed_type_label,state,confidence,description,notes
+Contract,(?i).*engagement letter.*,Contract,Active,1,Matches engagement letter documents,Use regex form for partial filename matching
+Proposition,(?i).*proposal.*,Proposition,Active,1,Maps proposal wording to Proposition,Use when filenames contain Proposal but canonical class is Proposition
+Credential,(?i).*(credential|credentials|case study).*,Credential,Active,1,Matches credential and case study documents,Can be narrowed later if too broad
+RFPResponse,(?i).*rfp.*,RFPResponse,Active,1,Matches RFP response documents,May also catch folder names if stored in fileName
+Presentation,(?i).*(ppt|pptx|deck|slide|slides|presentation).*,Presentation,Active,1,Matches presentation style documents,Good starter rule for Office files
+LCIV,(?i).*London CIV*,Client,Active,1,Matches client Names,Use regex form for partial filename matching
+HSBC,(?i).*Hong Kong Shanghai Bank*,Client,Active,2,Matches client Names,Use regex form for partial filename matching
+Deutsche Bank,(?i).*DB*,Client,Active,3,Matches client Names,Use regex form for partial filename matching
+Citigroup,(?i).*Citi*,Client,Active,4,Matches client Names,Use regex form for partial filename matching
+Thought Leadership,(?i).*blog*,ThoughtLeadership,Active,1,Matches Thought Leadership documents,Use regex form for partial filename matching

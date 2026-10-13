@@ -1,0 +1,10 @@
+seed_type_label,type_uri,example_canonical_label,notes
+Contract,https://data.capco.com/kg/ontology/Contract,Contract,Used for engagement letter style documents
+Proposition,https://data.capco.com/kg/ontology/Proposition,Proposition,Useful when file names contain proposal but business class is Proposition
+Proposal,https://data.capco.com/kg/ontology/Proposal,Proposal,Use only if you want Proposal as the actual inferred class
+Credential,https://data.capco.com/kg/ontology/Credential,Credential,Used for credentials and case studies
+RFPResponse,https://data.capco.com/kg/ontology/RFPResponse,RFPResponse,Used for RFP material
+Presentation,https://data.capco.com/kg/ontology/Presentation,Presentation,Used for decks and slides
+Client,https://data.capco.com/kg/ontology/Client,Client,Use for client or entity matching seeds
+DocumentRole,https://data.capco.com/kg/ontology/DocumentFamily,DocumentRole,Deprecated umbrella bucket. Prefer Proposition, Proposal, Credential, RFPResponse, RFIResponse, or Presentation.
+ThoughtLeadership,https://data.capco.com/kg/ontology/ThoughtLeadership,ThoughtLeadership,Tag Blogs
