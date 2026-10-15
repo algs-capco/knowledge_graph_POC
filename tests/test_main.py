@@ -1,11 +1,18 @@
-from knowledge_graph_poc import main
-from knowledge_graph_poc.parser import FileReference, load_patterns, parse_files
+from knowledge_graph_poc.parser import (
+    FileReference,
+    build_rdf_graph,
+    load_ontology,
+    load_patterns,
+    parse_files,
+)
 from pathlib import Path
+from rdflib import Namespace, RDF, RDFS, URIRef
 
-import pytest
+
+CAPCO = Namespace("https://data.capco.com/kg/ontology/")
 
 
-def test_rules_match_document_type_in_a_real_file_path():
+def test_hsbc_rfp():
     ontology_dir = (
         Path(__file__).parent.parent
         / "src"
@@ -14,35 +21,124 @@ def test_rules_match_document_type_in_a_real_file_path():
         / "ontology"
     )
     rules = load_patterns(ontology_dir / "seeds-upload.ttl")
-    file_path = Path(__file__).parent / "resources" / "test_file_system" / "HSBC" / "Rfps" / "HSBC_RFP_2026.docx"
+    file_path = (
+        Path(__file__).parent
+        / "resources"
+        / "test_file_system"
+        / "HSBC"
+        / "Rfps"
+        / "HSBC_RFP_2026.docx"
+    )
+    assert file_path.is_file()
     file = FileReference(path=str(file_path), name=file_path.name)
 
-    result = parse_files([file], rules)[0]
+    results = parse_files([file], rules)
+    ontology = load_ontology()
+    graph = build_rdf_graph(results, ontology)
+    file_uri = URIRef(file_path.resolve().as_uri())
+    hsbc_seed_uri = URIRef("https://data.capco.com/kg/asset/seed-hsbc")
 
-    hsbc_match = next(
-        match for match in result.matches if match.pattern_name == "HSBC"
-    )
-    rfp_match = next(
-        match for match in result.matches if match.pattern_name == "RFPResponse"
-    )
+    assert (file_uri, RDF.type, CAPCO.RFPResponse) in graph
+    assert (file_uri, RDF.type, CAPCO.Document) in graph
+    assert (file_uri, RDF.type, CAPCO.KnowledgeAsset) in graph
+    assert (CAPCO.RFPResponse, RDFS.subClassOf, CAPCO.Document) in graph
+    assert (CAPCO.Document, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
+    assert (file_uri, CAPCO.aboutClient, hsbc_seed_uri) in graph
 
-    # RDF-shaped tuple: (subject, predicate, object). The document's detected
-    # type and the matched client seed are both taken from the seed file.
-    rdf_tuple = (
-        str(file_path),
-        hsbc_match.rdf_type_uri,
-        hsbc_match.resource_uri,
+def test_hsbc_presentation():
+    ontology_dir = (
+        Path(__file__).parent.parent
+        / "src"
+        / "knowledge_graph_poc"
+        / "resources"
+        / "ontology"
     )
-    document_type_tuple = (
-        str(file_path),
-        "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-        rfp_match.rdf_type_uri,
+    rules = load_patterns(ontology_dir / "seeds-upload.ttl")
+    file_path = (
+        Path(__file__).parent
+        / "resources"
+        / "test_file_system"
+        / "HSBC"
+        / "credentials"
+        / "GL hrs cred.pptx"
     )
+    assert file_path.is_file()
+    file = FileReference(path=str(file_path), name=file_path.name)
 
-    assert hsbc_match.rdf_type_uri == "https://data.capco.com/kg/ontology/Client"
-    assert rdf_tuple == (
-        str(file_path),
-        "https://data.capco.com/kg/ontology/Client",
-        "https://data.capco.com/kg/asset/seed-hsbc",
+    results = parse_files([file], rules)
+    ontology = load_ontology()
+    graph = build_rdf_graph(results, ontology)
+    file_uri = URIRef(file_path.resolve().as_uri())
+    hsbc_seed_uri = URIRef("https://data.capco.com/kg/asset/seed-hsbc")
+
+    assert (file_uri, RDF.type, CAPCO.Presentation) in graph
+    assert (file_uri, RDF.type, CAPCO.Document) in graph
+    assert (file_uri, RDF.type, CAPCO.KnowledgeAsset) in graph
+    assert (CAPCO.Presentation, RDFS.subClassOf, CAPCO.Document) in graph
+    assert (CAPCO.Document, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
+    assert (file_uri, CAPCO.aboutClient, hsbc_seed_uri) in graph
+
+def test_hsbc_cred():
+    ontology_dir = (
+            Path(__file__).parent.parent
+            / "src"
+            / "knowledge_graph_poc"
+            / "resources"
+            / "ontology"
+        )
+    rules = load_patterns(ontology_dir / "seeds-upload.ttl")
+    file_path = (
+        Path(__file__).parent
+        / "resources"
+        / "test_file_system"
+        / "HSBC"
+        / "credentials"
+        / "GL hrs cred.pptx"
     )
-    assert document_type_tuple[2] == "https://data.capco.com/kg/ontology/RFPResponse"
+    assert file_path.is_file()
+    file = FileReference(path=str(file_path), name=file_path.name)
+
+    results = parse_files([file], rules)
+    ontology = load_ontology()
+    graph = build_rdf_graph(results, ontology)
+    file_uri = URIRef(file_path.resolve().as_uri())
+    hsbc_seed_uri = URIRef("https://data.capco.com/kg/asset/seed-hsbc")
+
+    assert (file_uri, RDF.type, CAPCO.Credential) in graph
+    assert not (file_uri, RDF.type, CAPCO.RFPResponse) in graph
+    assert (file_uri, RDF.type, CAPCO.Document) in graph
+    assert (file_uri, RDF.type, CAPCO.KnowledgeAsset) in graph
+    assert (CAPCO.Credential, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
+    assert (file_uri, CAPCO.aboutClient, hsbc_seed_uri) in graph
+
+def test_neso_rfp():
+    ontology_dir = (
+        Path(__file__).parent.parent
+        / "src"
+        / "knowledge_graph_poc"
+        / "resources"
+        / "ontology"
+    )
+    rules = load_patterns(ontology_dir / "seeds-upload.ttl")
+    file_path = (
+        Path(__file__).parent
+        / "resources"
+        / "test_file_system"
+        / "NESO"
+        / "RFP_NESO_26.docx"
+    )
+    assert file_path.is_file()
+    file = FileReference(path=str(file_path), name=file_path.name)
+
+    results = parse_files([file], rules)
+    ontology = load_ontology()
+    graph = build_rdf_graph(results, ontology)
+    file_uri = URIRef(file_path.resolve().as_uri())
+    nesso_seed_uri = URIRef("https://data.capco.com/kg/asset/seed-neso")
+
+    assert (file_uri, RDF.type, CAPCO.RFPResponse) in graph
+    assert (file_uri, RDF.type, CAPCO.Document) in graph
+    assert (file_uri, RDF.type, CAPCO.KnowledgeAsset) in graph
+    assert (CAPCO.RFPResponse, RDFS.subClassOf, CAPCO.Document) in graph
+    assert (CAPCO.Document, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
+    assert (file_uri, CAPCO.aboutClient, nesso_seed_uri) in graph

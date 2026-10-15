@@ -23,3 +23,13 @@ uv run pytest
 ```
 
 The package source is in `src/knowledge_graph_poc/`. Add runtime dependencies with `uv add <package>`.
+
+## Knowledge asset types
+
+The v0.2 ontology models reusable business content as `KnowledgeAsset`, including:
+
+- `Document`, with subtypes `RFPResponse`, `RFIResponse`, `Proposal`, and `Presentation`
+- `Proposition`
+- `Credential`, with subtype `CaseStudy`
+
+`FileObject` represents the physical file in its source system. `KnowledgeAsset` represents the business content associated with that file.
