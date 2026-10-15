@@ -65,6 +65,15 @@
     capco:description "Matches client Names" ;
     rdfs:comment "Confidence 2. Notes: Use regex form for partial filename matching" .
 
+<https://data.capco.com/kg/asset/seed-neso>
+    a capco:SeedItem, capco:Client ;
+    rdfs:label "NESO" ;
+    capco:aliasToken "(?i).*NESO.*" ;
+    capco:canonicalLabel "NESO" ;
+    capco:state "Active" ;
+    capco:description "Matches client Names" ;
+    rdfs:comment "Confidence 2. Notes: Use regex form for partial filename matching" .
+
 <https://data.capco.com/kg/asset/seed-deutsche-bank>
     a capco:SeedItem, capco:Client ;
     rdfs:label "Deutsche Bank" ;
