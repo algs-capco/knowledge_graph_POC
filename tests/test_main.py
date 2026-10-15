@@ -44,6 +44,7 @@ def test_hsbc_rfp():
     assert (CAPCO.RFPResponse, RDFS.subClassOf, CAPCO.Document) in graph
     assert (CAPCO.Document, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
     assert (file_uri, CAPCO.aboutClient, hsbc_seed_uri) in graph
+    assert (hsbc_seed_uri, RDF.type, CAPCO.Organisation) in graph
 
 def test_hsbc_presentation():
     ontology_dir = (
@@ -77,6 +78,7 @@ def test_hsbc_presentation():
     assert (CAPCO.Presentation, RDFS.subClassOf, CAPCO.Document) in graph
     assert (CAPCO.Document, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
     assert (file_uri, CAPCO.aboutClient, hsbc_seed_uri) in graph
+    assert (hsbc_seed_uri, RDF.type, CAPCO.Organisation) in graph
 
 def test_hsbc_cred():
     ontology_dir = (
@@ -110,8 +112,11 @@ def test_hsbc_cred():
     assert (file_uri, RDF.type, CAPCO.KnowledgeAsset) in graph
     assert (CAPCO.Credential, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
     assert (file_uri, CAPCO.aboutClient, hsbc_seed_uri) in graph
+    assert (hsbc_seed_uri, RDF.type, CAPCO.Organisation) in graph
 
 def test_neso_rfp():
+
+    
     ontology_dir = (
         Path(__file__).parent.parent
         / "src"
@@ -142,3 +147,4 @@ def test_neso_rfp():
     assert (CAPCO.RFPResponse, RDFS.subClassOf, CAPCO.Document) in graph
     assert (CAPCO.Document, RDFS.subClassOf, CAPCO.KnowledgeAsset) in graph
     assert (file_uri, CAPCO.aboutClient, nesso_seed_uri) in graph
+    assert (nesso_seed_uri, RDF.type, CAPCO.Organisation) in graph
