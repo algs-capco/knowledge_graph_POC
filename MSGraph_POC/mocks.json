@@ -1,0 +1,69 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/dev-proxy/main/schemas/v3.3.1/mockresponseplugin.mocksfile.schema.json",
+  "mocks": [
+    {
+      "request": {
+        "url": "https://graph.microsoft.com/v1.0/me/drive/root:/Graph%20POC%20Filestructure:/children",
+        "method": "GET"
+      },
+      "response": {
+        "statusCode": 200,
+        "headers": [
+          {
+            "name": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#drive/root/children",
+          "value": [
+            {
+              "id": "hsbc-folder",
+              "name": "HSBC",
+              "folder": {
+                "childCount": 1
+              },
+              "parentReference": {
+                "driveId": "mock-drive",
+                "id": "graph-poc-filestructure"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "request": {
+        "url": "https://graph.microsoft.com/v1.0/me/drive/root:/Graph%20POC%20Filestructure/HSBC:/children",
+        "method": "GET"
+      },
+      "response": {
+        "statusCode": 200,
+        "headers": [
+          {
+            "name": "content-type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#drive/root/children",
+          "value": [
+            {
+              "id": "fun-rfp-file",
+              "name": "Fun_RFP.txt",
+              "size": 31,
+              "webUrl": "https://example.test/Fun_RFP.txt",
+              "file": {
+                "mimeType": "text/plain"
+              },
+              "parentReference": {
+                "driveId": "mock-drive",
+                "id": "hsbc-folder"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
