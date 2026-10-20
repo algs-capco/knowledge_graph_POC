@@ -1,0 +1,7 @@
+{
+  "client_mode": "devproxy",
+  "folder_path": "Graph POC Filestructure",
+  "graph_scopes": [
+    "Files.Read"
+  ]
+}
